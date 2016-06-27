@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <link href="~/Styles/Libs/reset.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Styles/Layout.css" rel="stylesheet" />
+        <title>@Page.Title</title>
+    </head>
+<body class="container row center-block">
+
+    @{      
+        var user_logic = new _EPAM_Forum.BLL.UserLogic();
+        
+    }
+    <header class="page-header ">
+        <h1><a href="~/">Форум о языке программирования C#</a></h1>
+    </header>
+    <nav class="nav nav-list">
+        <ul>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><a  href="~/Pages/WebUser/WebUserData.cshtml?UserId=@user_logic.GetIdAnWebUserName(User.Identity.Name)">@User.Identity.Name</a></li>
+                <li> <a href="~/Logout">Logout</a></li>
+                if (User.IsInRole("admin"))
+                {
+                    <li><a href="~/ForumManagement.cshtml">Управление форумом</a></li>
+                }
+            }
+
+            else
+            {
+                <li> <a id="Login" href="~/Login.cshtml">login</a> </li>
+                <li> <a href="~/Registration.cshtml">Registration</a> </li>
+            }
+        </ul>
+
+    </nav>
+
+    <main class="page-container">
+        @RenderBody()
+    </main>
+
+    <footer class="panel-footer">
+        <h1><a href="~/">Форум о языке программирования C#</a></h1>
+    </footer>
+
+    <script src="~/scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <script src="~/scripts/Forum.js"></script>
+</body>
+
+
+
+</html>

@@ -1,0 +1,30 @@
+﻿
+@using _EPAM_Forum.Entites;
+@{
+    int user_id = -1;
+    if (Request["UserId"] != null)
+    {
+        user_id = int.Parse(Request["UserId"]);
+    }
+    var user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var user_message_logic = new _EPAM_Forum.BLL.UserMessageLogic();
+    var message_logic = new _EPAM_Forum.BLL.MessageLogic();
+   
+    MessageDTO[] messages = null;
+    messages = user_message_logic.GetMessagesForUser(user_id);
+}
+
+<h1><a href="~/Pages/WebUser/AllMessagesByUser.cshtmlUserId=@user_id">@user_logic.Get(int.Parse(Request["UserId"])).Name</a></h1>
+
+    <div class="form-group">
+        <ul>
+            @foreach (var item in messages)
+            {
+                <li>
+                    @item.Text
+                    @item.DateOfCreation.ToString("dd/MM/yyyy")
+
+                </li>
+            }
+        </ul>
+    </div>

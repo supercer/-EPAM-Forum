@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2BD6C16E-1D3F-40C0-871D-E1C39BF3CB0C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>_EPAM_Forum.BLL</RootNamespace>
+    <AssemblyName>[EPAM]Forum.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MessageLogic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleLogic.cs" />
+    <Compile Include="SectionLogic.cs" />
+    <Compile Include="SectionTopicLogic.cs" />
+    <Compile Include="TopicLogic.cs" />
+    <Compile Include="TopicMessageLogic.cs" />
+    <Compile Include="UserLogic.cs" />
+    <Compile Include="UserMessageLogic.cs" />
+    <Compile Include="UserRoleLogic.cs" />
+    <Compile Include="UserTopicLogic.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{b91cf018-be5c-4f57-bb0d-f26ea6796112}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\[EPAM]Forum.DALDATABASE\[EPAM]Forum.DALDATABASE.csproj">
+      <Project>{2b7522ea-1a5f-4b13-9dfc-aa311aa26d19}</Project>
+      <Name>[EPAM]Forum.DALDATABASE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\[EPAM]Forum.Entites\[EPAM]Forum.Entites.csproj">
+      <Project>{e6a9cc10-47d2-470d-aa4a-b7baf7b89236}</Project>
+      <Name>[EPAM]Forum.Entites</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\[EPAM]Forum.Intefases.BLL\[EPAM]Forum.Intefases.BLL.csproj">
+      <Project>{6c9f2762-7eae-4c4c-9c99-ead14b12e755}</Project>
+      <Name>[EPAM]Forum.Intefases.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\[EPAM]Forum.Interfases.DAL\[EPAM]Forum.Interfases.DAL.csproj">
+      <Project>{9ada2369-6ef6-4003-91a6-0563f68e60de}</Project>
+      <Name>[EPAM]Forum.Interfases.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

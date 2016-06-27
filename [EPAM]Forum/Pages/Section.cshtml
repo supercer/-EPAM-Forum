@@ -1,0 +1,98 @@
+﻿
+@using _EPAM_Forum.Entites;
+@{
+    int section_id = -1 ;
+    if (Request["SectionId"] != null)
+    {
+        section_id = int.Parse(Request["SectionId"]);
+    }
+
+    var section_logic = new _EPAM_Forum.BLL.SectionLogic();
+    var topic_logic = new _EPAM_Forum.BLL.TopicLogic();
+    var section_topic = new _EPAM_Forum.BLL.SectionTopicLogic();
+    var user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var user_topic_logic = new _EPAM_Forum.BLL.UserTopicLogic();
+    DateTime date_of_creation = new DateTime();
+    string name = null;
+    if (IsPost)
+    {
+        if (Request["Name"] != null)
+        {
+            date_of_creation = DateTime.Now;
+            name = Request["Name"];
+
+            var current_topic_id = topic_logic.Create(new TopicDTO(name, date_of_creation));
+            section_topic.Create(new SectionTopicDTO(section_id, current_topic_id));
+            user_topic_logic.Create(new UserTopicDTO(user_logic.GetIdAnWebUserName(User.Identity.Name), current_topic_id));
+        }
+    }
+
+
+    if (Request["ChangedNameTopic"] != null)
+    {
+        var topic = topic_logic.Get(int.Parse(Request["TopicId"]));
+        topic.Name = Request["ChangedNameTopic"];
+        topic_logic.Update(topic);
+    }
+
+    TopicDTO[] topics = null;
+    topics = section_topic.GetTopicsForSection(section_id);
+
+}
+
+<h1><a href="~/Pages/Section.cshtml?SectionId=@section_id">@section_logic.Get(int.Parse(Request["SectionId"])).Name</a></h1>
+<div class="form-group">
+    <div class="topics">
+        @foreach (var item in topics)
+            {
+            <div class="topic">
+                @{
+                    var user_id = user_topic_logic.GetIdUserByIdTopic(item.Id);
+                }
+
+                @if (user_id != -1)
+                {
+                    <a class="topic-login-user" href="~/Pages/WebUser/WebUserData.cshtml?UserId=@user_id">@user_logic.Get(user_id).Login</a>
+                    var user = user_logic.Get(user_id);
+                    if (user.AvatarId != null)
+                    {
+                        <img class="topic-avatar img-responsive img-rounded" src="~/Pages/Avatar/View?id=@user.AvatarId" />
+                    }
+                    else
+                    {
+                        <img src="~/Pages/Avatar/View?id=1" class="img-responsive img-rounded message-avatar img-responsive img-rounded" />
+
+                    }
+                }
+
+                <p><a href="~/Pages/Topic.cshtml?TopicId=@item.Id">@item.Name</a></p>
+
+                <span class="message-date-of-create">@item.DateOfCreation.ToString("dd/MM/yyyy")</span>
+
+                @if (User.IsInRole("admin"))
+                {
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="ChangedNameTopic">Изменение темы</label>
+                            <input id="ChangedNameTopic" type="text" name="ChangedNameTopic" />
+                            <input type="hidden" name="TopicId" value="@item.Id" />
+                            <button>Отправить</button>
+                        </div>
+                    </form>
+                }
+
+            </div>
+                    }
+    </div>
+</div>
+
+@if ((User.IsInRole("user")) && (!User.IsInRole("blacklisted")))
+{ 
+        <button id="NewTopic">Новая тема</button>
+        <form method="post">
+            <div class="form-group">
+                <div id="NewTopicContainer">
+                </div>
+                </div>
+        </form>
+}

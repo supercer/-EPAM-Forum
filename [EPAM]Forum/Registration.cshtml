@@ -1,0 +1,102 @@
+﻿@using _EPAM_Forum.Entites
+@{
+    var web_user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var logic_role = new _EPAM_BLL.RoleLogic();
+    var logic_web_user_role_logic = new _EPAM_Forum.BLL.UserRoleLogic();
+    if (IsPost)
+    {
+        if (Request["Password"].Length > 5)
+        {
+            if (web_user_logic.GetIdAnWebUserName(Request["Login"]) != -1)
+            {
+                <div class="alert alert-danger">
+                   Пользователь с таким логином уже существует
+                </div>
+            }
+
+            if ((web_user_logic.GetIdAnWebUserName(Request["Login"]) == -1) && (Request["RepeatPassword"] == Request["Password"]))
+            {
+                web_user_logic.Create(new UserDTO(Request["Login"], Request["Password"].GetHashCode(), DateTime.Now, Request["Name"], Request["Gender"], DateTime.Parse(Request["DateOfBirth"])));
+                int web_user_id = web_user_logic.GetIdAnWebUserName(Request["Login"]);
+                int role_id = logic_role.GetIdAnRoleName("user");
+                logic_web_user_role_logic.Create(new UserRoleDTO(web_user_id, role_id));
+                <p>Registration completed successfully</p>
+            }
+        }
+    }
+}
+
+<form role="form" method="post" class="form-horizontal" novalidate>
+    <div class="form-group registration">
+        <label for="Login" class="control-label col-sm-2">Login</label>
+        <div class="col-sm-10">
+            <input name="Login" type="text" class="form-control" placeholder="Login" required/>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label for="Password" class="control-label col-sm-2" >Password</label>
+        <div class="col-sm-10">
+            <input id="Password" name="Password" type="password" class="form-control" placeholder="Password" required />
+        </div>
+    </div>
+        <p id="error"></p>
+    <p id="error2"></p>
+    <div class="form-group">
+        <label for="RepeatPassword" class="control-label col-sm-2">Confirm password</label>
+        <div class="col-sm-10">
+            <input id="RepeatPassword" name="RepeatPassword" type="password" class="form-control" placeholder="Confirm password " required/>
+        </div>
+    </div>
+
+    @{if (IsPost)
+        {
+            if (Request["Password"].Length < 6)
+            {
+                <div class="alert alert-danger">
+                    <p>A password must be more than 6 characters</p>
+                    </div>
+
+            }
+
+            if (Request["RepeatPassword"] != Request["Password"])
+            {
+                <div class="alert alert-danger">
+                    <p>Confirm password does not match password</p>
+                    </div>
+
+                    }
+                    }
+                    }
+
+                    <div class="form-group">
+                        <label for="Name" class="control-label col-sm-2">Name </label>
+                        <div class="col-sm-10">
+                            <input name="Name" type="text" class="form-control" placeholder="Name " required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Gender" class="control-label col-sm-2">Gender</label>
+                        <div class="col-sm-10">
+                            <select name="Gender" class="form-control" placeholder="Gender ">
+                                <option value="man">Man</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="DateOfBirth" class="control-label col-sm-2">DateOfBirth</label>
+                        <div class="col-sm-10">
+                            <input name="DateOfBirth" type="date" class="form-control" placeholder="DateOfBirth " required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" class="btn btn-info" value="Send" />
+                        </div>
+                    </div>
+</form>
+
+
+
+<a href="~/Default.cshtml">Back</a>

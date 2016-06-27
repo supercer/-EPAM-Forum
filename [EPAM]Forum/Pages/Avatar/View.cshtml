@@ -1,0 +1,20 @@
+﻿@{
+    var stringId = Request["id"];
+    int id;
+    if (string.IsNullOrWhiteSpace(stringId) || !int.TryParse(stringId, out id))
+    {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        return;
+    }
+    var user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var avatar = user_logic.GetAvatar(id);
+    Response.WriteBinary(avatar.Content, avatar.ContentType);
+    if (avatar == null)
+    {
+        Response.SetStatus(HttpStatusCode.NotFound);
+        return;
+    }
+
+    Response.WriteBinary(avatar.Content, avatar.ContentType);
+    Response.AddHeader("Content-Disposition", $"inline; filename=\"\"");
+}

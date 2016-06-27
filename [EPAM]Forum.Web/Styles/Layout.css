@@ -1,0 +1,63 @@
+﻿.page-container{
+min-height:400px;
+}
+
+#Name{
+    width:400px;
+}
+
+#Text{
+     width:400px;
+}
+nav{
+    float:right;
+}
+
+.section{
+    font-size:30px;
+}
+
+.messages{
+    margin-top:50px;
+}
+.message{
+    border:1px double blue;
+    margin:10px;
+}
+
+.message-avatar{
+  float:left;
+  width:60px;
+  height:50px;
+}
+
+.message-login-user{
+    float:right;
+}
+
+.registration{
+    margin-top:100px;
+}
+
+.topics{
+    margin-top:50px;
+}
+.topic{
+    border:1px double blue;
+    margin:10px;
+}
+
+.topic-avatar{
+  float:left;
+  width:60px;
+  height:50px;
+}
+
+.topic-login-user{
+    float:right;
+}
+
+.user-data-avatar{
+    width:80px;
+    height:80px;
+}

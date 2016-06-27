@@ -1,0 +1,99 @@
+﻿
+@using _EPAM_Forum.Entites;
+@{
+    int topic_id = -1;
+    if (Request["TopicId"] != null)
+    {
+        topic_id = int.Parse(Request["TopicId"]);
+    }
+
+    var user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var user_message_logic = new _EPAM_Forum.BLL.UserMessageLogic();
+    var topic_message_logic = new _EPAM_Forum.BLL.TopicMessageLogic();
+    var message_logic = new _EPAM_Forum.BLL.MessageLogic();
+    var topic_logic = new _EPAM_Forum.BLL.TopicLogic();
+    DateTime date_of_creation = new DateTime();
+    string text = null;
+
+    if (IsPost)
+    {
+        if (Request["Text"] != null)
+        {
+            date_of_creation = DateTime.Now;
+            text = Request["Text"];
+
+            var current_message_id = message_logic.Create(new MessageDTO(text, date_of_creation));
+            topic_message_logic.Create(new TopicMessageDTO(topic_id, current_message_id));
+            user_message_logic.Create(new UserMessageDTO(user_logic.GetIdAnWebUserName(User.Identity.Name), current_message_id));
+        }
+
+        if (Request["ChangedText"] != null)
+        {
+            var message = message_logic.Get(int.Parse(Request["MessageId"]));
+            message.Text = Request["ChangedText"];
+            message_logic.Update(message);
+        }
+    }
+
+    MessageDTO[] messages = null;
+    messages = topic_message_logic.GetMessagesForTopic(topic_id);
+}
+
+<h1><a href="~/Pages/Topic.cshtml?TopicId=@topic_id">@topic_logic.Get(int.Parse(Request["TopicId"])).Name</a></h1>
+
+<div class="form-group">
+    <div class="messages">
+        @foreach (var item in messages)
+        {
+            <article>
+            <div class="message">
+                @{
+                    var user_id = user_message_logic.GetIdUserByIdMessage(item.Id);
+                }
+
+                @if (user_id != -1)
+                {
+                    <a class="message-login-user" href="~/Pages/WebUser/WebUserData.cshtml?UserId=@user_id">@user_logic.Get(user_id).Login</a>
+                    var user = user_logic.Get(user_id);
+                    if (user.AvatarId != null)
+                    {
+                        <img class="message-avatar img-responsive img-rounded" src="~/Pages/Avatar/View?id=@user.AvatarId" />
+                    }
+                    else
+                    {
+                        <img src="~/Pages/Avatar/View?id=1" class="img-responsive img-rounded message-avatar img-responsive img-rounded" />
+
+                    }
+                }
+
+                <p class="message-text">@item.Text</p>
+
+                <span class="message-date-of-create">@item.DateOfCreation.ToString("dd/MM/yyyy")</span>
+
+                @if (User.IsInRole("admin"))
+                {
+                <form method="post">
+                    <div class="form-group">
+                        <label for="ChangedText">Изменение сообщения</label>
+                        <input id="ChangedText" type="text" name="ChangedText" />
+                        <input type="hidden" name="MessageId" value="@item.Id"/>
+                        <button>Отправить</button>
+                    </div>
+                </form>
+                }
+            </div>
+                </article>
+                    }
+    </div>
+</div>
+
+@if ((User.IsInRole("user")) && (!User.IsInRole("blacklisted")))
+{
+    <button id="NewMessage">Новое сообщение</button>
+        <form method="post">
+            <div class="form-group">
+                <div id="NewMessageContainer">
+                </div>
+            </div>
+        </form>
+}

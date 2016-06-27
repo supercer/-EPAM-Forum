@@ -1,0 +1,55 @@
+﻿
+@using _EPAM_Forum.Entites;
+@{
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.SetStatus(HttpStatusCode.Forbidden);
+        return;
+    }
+
+    int user_id = -1;
+    if (Request["UserId"] != null)
+    {
+        user_id = int.Parse(Request["UserId"]);
+    }
+
+    var user_logic = new _EPAM_Forum.BLL.UserLogic();
+    var user_message_logic = new _EPAM_Forum.BLL.UserMessageLogic();
+
+    var message_logic = new _EPAM_Forum.BLL.MessageLogic();
+
+    UserDTO user = user_logic.Get(user_id);
+}
+     @if (user.AvatarId != null)
+            {
+
+    <img class="user-data-avatar" src="~/Pages/Avatar/View?id=@user.AvatarId" class="img-responsive img-rounded" />
+  }
+      else
+          {
+    <img class="user-data-avatar" src="~/Pages/Avatar/View?id=1" class="img-responsive img-rounded" />
+         if ((User.Identity.Name == user.Login) || User.IsInRole("admin"))
+             {
+                <div class="form-group">
+                    <label for="uploaded" class="control-label">Choose file for upload</label>
+                    <input type="file" class="form-control" id="uploaded" name="uploaded" />
+                </div>
+                    <input type="hidden" name="ReturnUrl" value="@Request.Url" />
+                    <input type="hidden" name="UserId" value="@user.Id" />
+                    <button type="submit" class="btn btn-default">Upload image</button>
+         }
+     }
+
+<h1><a href="~/Pages/WebUser/WebUserData.cshtml?UserId=@user_id">@user_logic.Get(int.Parse(Request["UserId"])).Name</a></h1>
+<form action="~/Pages/Avatar/Upload.cshtml" method="post" enctype="multipart/form-data" role="form">
+    <div class="form-group">
+        <ul>
+            <li>@user.Name</li>
+            <li>@user.Gender</li>
+            <li>@user.DateOfBirth</li>
+            <li>@user.Age</li>
+            <li>@user.RegistrationDate</li>
+            <li><a href="~/Pages/WebUser/AllMessagesByUser.cshtml?UserId=@user.Id">Сообщения пользователя</a></li>
+        </ul>
+    </div>
+</form>
